@@ -1,0 +1,10 @@
+sudo apt-get install gcc-avr binutils-avr avr-libc
+sudo apt-get install avrdude
+//Sửa code
+Sửa include <lcd.h> và <button.h> trong các file .c từ <> sang ""
+//Bien dịch code
+avr-gcc -mmcu=atmega16a -Os -o main.elf main.c lcd.c button.c
+avr-objcopy -O ihex -R .eeprom main.elf main.hex
+/nạp code
+avrdude -c usbasp -p m328p -U flash:w:main.hex
+
