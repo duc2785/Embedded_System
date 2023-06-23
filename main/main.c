@@ -30,7 +30,7 @@ unsigned int Rpm_new = 0; // toc do quay cua dong co tren giay
 unsigned int  Rpm_cu = 0 ;
 unsigned int  Rpm_tmp = 0 ;
 unsigned int  Count_tmp = 0 ;
-unsigned int  Erpm_new; // toc do quay cua dong co
+unsigned int  Erpm_new; // toc do quay cua dong co (extended rpm)
 unsigned int  Erpm_old;
 unsigned int Prpm = 0; // toc do quay cua may bom tren phut
 bool direct;
