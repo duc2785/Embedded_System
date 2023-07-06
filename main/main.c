@@ -54,7 +54,7 @@ void display_label(){
 
 int rpm2erpm(unsigned int rpm)
 {
-	return (500+100*rpm);
+	return (rpm * 3.6 * 2);
 }
 void Calculate_Gpm()
 {
@@ -76,7 +76,11 @@ void Calculate_Gpm()
 
 void pressure_balance()
 {
-	
+	V += Pump;
+	V -= Gpm;
+	P = (P_init * V) / V_init; // ap suat moi thu duoc tinh theo cong thuc
+
+
 	sprintf(lcd,"%d ",Erpm_new);
 	LCD_String_xy(1, 0, lcd);
 	
@@ -85,32 +89,32 @@ void pressure_balance()
 	
 	sprintf(lcd,"%2.1f ", P);
 	LCD_String_xy(1, 13, lcd);
-	V += Pump;
-	V -= Gpm;
-	P = (P_init * V) / V_init; // ap suat moi thu duoc tinh theo cong thuc
 
 	//dieu chinh toc do bom sao cho dat yeu cau ve ap suat
 	if (P < (P_init - 0.2)){   // 0.2 la nguong/phuong sai
 		direct = false;
 		Prpm += Pump_rpc;
-		Pump += (Pump_init/Prpm_init*Pump_rpc);
+		Pump = Prpm / 20;
 	}
 	if (P > (P_init + 0.2)){
 		direct = true;
 		Prpm -= Pump_rpc;
-		Pump -= (Pump_init/Prpm_init*Pump_rpc);
+		// Pump -= (Pump_init/Prpm_init*Pump_rpc);
+		Pump = Prpm / 20;
 	}
 	if (P == P_init){
 		//
 	}
 	else{
 		if (direct == false){
-			Prpm -= Pump_slc;
-			Pump -= (Pump_init/Prpm_init*Pump_slc);
+			Prpm += Pump_slc;
+			// Pump -= (Pump_init/Prpm_init*Pump_slc);
+			Pump = Prpm / 20;
 		}
 		else{
-			Prpm += Pump_slc;
-			Pump += (Pump_init/Prpm_init*Pump_slc);
+			Prpm -= Pump_slc;
+			// Pump += (Pump_init/Prpm_init*Pump_slc);
+			Pump = Prpm / 20;
 		}
 	}
 }
@@ -161,7 +165,7 @@ int main(void)
 	{
 		Calculate_Gpm();
 		pressure_balance();
-		_delay_ms(1000);
+		_delay_ms(200);
 	}
 
 	return 0;
